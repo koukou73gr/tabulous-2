@@ -1,6 +1,8 @@
 module Tabulous
   class Tabset
 
+    attr_accessor :name
+
     def initialize
       @tabs = []
     end

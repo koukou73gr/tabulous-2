@@ -21,9 +21,10 @@ module Tabulous
       @view = view
       @tabset = tabset
       begin
-        @renderer = "Tabulous::#{Config.renderer.to_s.camelize}Renderer".constantize.new(tabset, view)
+        renderer = Config.renderer[tabset.name] || Config.renderer[:default]
+        @renderer = "Tabulous::#{renderer.to_s.camelize}Renderer".constantize.new(tabset, view)
       rescue NameError
-        @renderer = "#{Config.renderer.to_s.camelize}Renderer".constantize.new(tabset, view)
+        @renderer = "#{renderer.to_s.camelize}Renderer".constantize.new(tabset, view)
       end
     end
 

@@ -39,10 +39,17 @@ module Tabulous
       end
 
       def renderer=(val)
-        unless val.is_a?(String) || val.is_a?(Symbol)
-          raise ImproperValueError, "renderer must be a string or a symbol"
-        end
-        @renderer = val
+        @renderer = 
+          if val.is_a?(Hash)
+            unless val[:default].present?
+              raise ImproperValueError, "you should always define a :default renderer"
+            end
+            val.each {|k,v| check_renderer(v)}
+            val
+          else
+            check_renderer(val)
+            {default: val}
+          end
       end
 
       def when_action_has_no_tab=(val)
@@ -50,6 +57,13 @@ module Tabulous
           raise ImproperValueError, "when_action_has_no_tab must be either :render, :do_not_render, or :raise_error"
         end
         @when_action_has_no_tab = val
+      end
+
+      private 
+      def check_renderer(val)
+        unless val.is_a?(String) || val.is_a?(Symbol)
+          raise ImproperValueError, "renderer must be a string or a symbol or a hash"
+        end
       end
 
     end

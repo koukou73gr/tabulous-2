@@ -18,6 +18,7 @@ module Tabulous
 
         def tabs(tabset_name = :default, &block)
           tabset = Dsl::Tabs.process(&block)
+          tabset.name = tabset_name
           Tabsets.add(tabset_name, tabset)
         end
 
